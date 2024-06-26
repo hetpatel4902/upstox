@@ -2,7 +2,7 @@ const express = require("express");
 const WebSocket = require("ws");
 const http = require("http");
 const https = require("https");
-
+const {v4:uuidv4} = require("uuid");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -62,10 +62,10 @@ wss.on("connection", (wsClient) => {
 
       wsUpstox.on("open", () => {
         console.log("Connected to Upstox WebSocket");
-
+        const guid = uuidv4();
         // Subscribe to the option chain data
         const subscriptionRequest = {
-          guid: "someguid", // Replace with your actual GUID
+          guid: guid, // Replace with your actual GUID
           method: "sub",
           data: {
             mode: "option_chain",
