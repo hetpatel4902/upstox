@@ -69,7 +69,7 @@ wss.on("connection", (wsClient) => {
           method: "sub",
           data: {
             mode: "option_chain",
-            instrumentKeys: ["NSE_EQ|HDFCBANK"], // Replace with your actual instrument keys
+            instrumentKeys: ["NSE_EQ|INE002A01018"], // Replace with your actual instrument keys
           },
         };
 
