@@ -2,7 +2,10 @@ const express = require("express");
 const WebSocket = require("ws");
 const http = require("http");
 const https = require("https");
-const {v4:uuidv4} = require("uuid");
+const { v4: uuidv4 } = require("uuid");
+const protobuf = require("protobufjs");
+const { MarketData } = require("google-protobuf/google/protobuf/descriptor_pb");
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -50,26 +53,24 @@ wss.on("connection", (wsClient) => {
       console.log("Redirecting to:", finalWebSocketUrl);
 
       // Create a WebSocket connection to the final URL
-      const wsUpstox = new WebSocket(
-        finalWebSocketUrl.replace("https", "wss"),
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            Accept: "*/*",
-          },
-        }
-      );
+      const wsUpstox = new WebSocket(finalWebSocketUrl.replace("https", "wss"), {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "*/*",
+        },
+      });
 
       wsUpstox.on("open", () => {
         console.log("Connected to Upstox WebSocket");
-        const guid = uuidv4();
+
         // Subscribe to the option chain data
+        const guid = uuidv4();
         const subscriptionRequest = {
-          guid: "eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI3VUE0N1QiLCJqdGkiOiI2NjdjZWY0N2ExNzU5YzZlNmEwMjU1NjkiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzE5NDYzNzUxLCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MTk1MjU2MDB9.rIYGxVOoGQlX2g6TzsyM50BZ2gff_DS-pplzCGivmsk", // Replace with your actual GUID
+          guid: guid,
           method: "sub",
           data: {
             mode: "full",
-            instrumentKeys: ["NSE_EQ|HDFCBANK"], // Replace with your actual instrument keys
+            instrumentKeys: ["NSE_EQ|HDFCBANK"],
           },
         };
 
@@ -78,8 +79,16 @@ wss.on("connection", (wsClient) => {
 
       wsUpstox.on("message", (message) => {
         console.log("Received message from Upstox:", message);
-        // Forward the message to the connected client
-        wsClient.send(message);
+
+        // Decode protobuf message
+        try {
+          const decodedMessage = MarketData.decode(message);
+          console.log("Decoded message:", decodedMessage);
+          // Forward the message to the connected client
+          wsClient.send(JSON.stringify(decodedMessage));
+        } catch (error) {
+          console.error("Error decoding protobuf message:", error);
+        }
       });
 
       wsUpstox.on("error", (error) => {
