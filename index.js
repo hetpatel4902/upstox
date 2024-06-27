@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
 
 // Replace with your Upstox access token
 const accessToken =
-  "eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI3VUE0N1QiLCJqdGkiOiI2NjdiN2M1OWExNzU5YzZlNmEwMWFhYjUiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzE5MzY4NzkzLCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MTk0MzkyMDB9.-jHj0ZeXPkYBa6noef5Z-JP84al_Ki3YOseiQ1PPW0c";
+  "eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI3VUE0N1QiLCJqdGkiOiI2NjdjZWY0N2ExNzU5YzZlNmEwMjU1NjkiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzE5NDYzNzUxLCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MTk1MjU2MDB9.rIYGxVOoGQlX2g6TzsyM50BZ2gff_DS-pplzCGivmsk";
 
 // The initial WebSocket URL
 const initialWebSocketUrl = "wss://api.upstox.com/v2/feed/market-data-feed";
@@ -68,8 +68,8 @@ wss.on("connection", (wsClient) => {
           guid: guid, // Replace with your actual GUID
           method: "sub",
           data: {
-            mode: "option_chain",
-            instrumentKeys: ["NSE_EQ|INE002A01018"], // Replace with your actual instrument keys
+            mode: "full",
+            instrumentKeys: ["NSE_EQ|HDFCBANK"], // Replace with your actual instrument keys
           },
         };
 
