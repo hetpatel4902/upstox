@@ -65,7 +65,7 @@ wss.on("connection", (wsClient) => {
         const guid = uuidv4();
         // Subscribe to the option chain data
         const subscriptionRequest = {
-          guid: guid, // Replace with your actual GUID
+          guid: "eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI3VUE0N1QiLCJqdGkiOiI2NjdjZWY0N2ExNzU5YzZlNmEwMjU1NjkiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzE5NDYzNzUxLCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MTk1MjU2MDB9.rIYGxVOoGQlX2g6TzsyM50BZ2gff_DS-pplzCGivmsk", // Replace with your actual GUID
           method: "sub",
           data: {
             mode: "full",
